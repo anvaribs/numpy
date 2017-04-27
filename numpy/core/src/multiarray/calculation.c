@@ -1173,31 +1173,14 @@ PyArray_Clip(PyArrayObject *self, PyObject *min, PyObject *max, PyArrayObject *o
 NPY_NO_EXPORT PyObject *
 PyArray_Conjugate(PyArrayObject *self, PyArrayObject *out)
 {
-    if (PyArray_ISCOMPLEX(self) || PyArray_ISOBJECT(self)) {
-        if (out == NULL) {
-            return PyArray_GenericUnaryFunction(self,
-                                                n_ops.conjugate);
-        }
-        else {
-            return PyArray_GenericBinaryFunction(self,
-                                                 (PyObject *)out,
-                                                 n_ops.conjugate);
-        }
+    if (out == NULL) {
+        return PyArray_GenericUnaryFunction(self,
+                                            n_ops.conjugate);
     }
     else {
-        PyArrayObject *ret;
-        if (out) {
-            if (PyArray_AssignArray(out, self,
-                        NULL, NPY_DEFAULT_ASSIGN_CASTING) < 0) {
-                return NULL;
-            }
-            ret = out;
-        }
-        else {
-            ret = self;
-        }
-        Py_INCREF(ret);
-        return (PyObject *)ret;
+        return PyArray_GenericBinaryFunction(self,
+                                             (PyObject *)out,
+                                             n_ops.conjugate);
     }
 }
 
